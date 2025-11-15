@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= singleList.title %></title>
+</head>
+<body>
+    <%= singleList._id %>
+    <div><%= singleList.title %></div>
+    <div><%= singleList.description %></div>
+    <div>&#8377; <%= singleList.price.toLocaleString("en-IN") %></div>
+    <img src="<%= singleList.image.url %>">
+    <div><%= singleList.location %></div>
+    
+</body>
+</html>
