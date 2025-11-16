@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<% layout("/layouts/boilerplate.ejs") %>
 <body>
-    <h1>Edit the listing</h1>
-    <form method="post" action="/listings/<%= listing._id %>?_method=PUT">
-        <input type="text" name="title" value="<%= listing.title %>">
-        <input type="text" name="description" value="<%= listing.description %>">
-        <input type="number" name="price" value="<%= listing.price %>">
-        <input type="text" name="location" value="<%= listing.location %>">
-        <input type="text" name="country" value="<%= listing.country %>">
-        <button>Edit the listing</button>
+   
+   
+    <div class="row new-form">
+    <div class="col-8 offset-2">
+        <h1>Edit details required:</h1>
+         <form method="post" action="/listings/<%= listing._id %>?_method=PUT">
+        <div class="mb-3"><label for="title" class="form-label">Edit The title</label>
+        <input type="text" name="title"  class="form-control" value="<%= listing.title%>"required></div>
+        <div class="mb-3"><label for="description" class="form-label">Description:</label><textarea class="form-control" name="description" id="" row="10" col="20"><%= listing.description %></textarea></div>
+        <div class="mb-3"><label for="price" class="form-label">Price of the listing:</label> <input value="<%= listing.price %>" class="form-control" type="number" name="price" step="100" required></div>
+        <div class="mb-3"><label for="location" class="form-label">Location:</label><input class="form-control" type="text" name="location" value="<%= listing.location %>"></div>
+        <div class="mb-3"><label for="country" class="form-label">Country:</label> <input  class="form-control" type="text" name="country" value="<%= listing.country %>"></div>
+       <button class="add-btn">Update</button>
     </form>
+    </div>
+   </div>
     
 </body>
-</html>
+
+

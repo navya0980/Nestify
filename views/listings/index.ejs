@@ -1,27 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nestify</title>
-</head>
+<% layout("/layouts/boilerplate.ejs") %>
 <body>
-    <h1>All listings</h1>
-    <form  method="get" action="/listings/new">
-        <button>Create New Listing</button>
-    </form>
+  <div class="row col-4-lg">
     <% for( let list of allListings ) { %>
-       <a href="/listings/<%= list._id %>">
-         <p><%= list.title %></p>
-       </a>
-       <form action="/listings/edit/<%= list._id %>" method="get">
-        <button>Edit</button>
-       </form>
-       <form method="post" action="/listings/<%= list._id %>?_method=DELETE" >
-        <button>Delete</button>
-       </form>
-    
+
+    <a href="/listings/<%= list._id %>" class="card-link">
+      <div class="card">
+        <img
+          src="<%= list.image.url %>"
+          class="card-img-top"
+          alt="<%= list.title %>"
+        />
+
+        <div class="card-img-overlay">
+          <button class="fa-heart-btn">
+            <i class="fa-regular fa-heart heart-outline"></i>
+            <i class="fa-solid fa-heart heart-solid"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            <b> <%= list.title %> <br /></b>
+            &#8377; <%=list.price.toLocaleString("en-IN") %>
+            
+          </p>
+        </div>
+      </div>
+    </a>
     <% } %>
-    
+  </div>
 </body>
-</html>
