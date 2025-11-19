@@ -61,7 +61,7 @@ li {
 }
 
 /* cards */
-.card-link,.card {
+.card-link,.listing-card {
   margin: 1rem;
   border: none !important;
   height: 20rem !important;

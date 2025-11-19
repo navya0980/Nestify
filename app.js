@@ -7,13 +7,14 @@ const methodOverride = require("method-override");
 const engine = require("ejs-mate");
 const wrapAsync = require("./utils/WrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const listingSchema = require("./utils/validateSchema.js");
+const {listingSchema ,reviewSchema, validate}= require("./schema.js");
+const Review=require("./models/reviews.js");
 
 app.listen(8080, () => {
   console.log("server is listening.....");
 });
 app.use(express.urlencoded({ extended: true }));
-app.set("views", "ejs");
+
 app.set("views", path.join(__dirname, "views"));
 app.use(methodOverride("X-HTTP-Method-Override"));
 app.use(methodOverride("_method"));
@@ -31,11 +32,39 @@ async function main() {
 
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
+
+
+const validateListing=(req,res,next)=>{
+  let {error}=listingSchema.validate(req.body);
+  if(error){
+    let errMsg=error.details.map((er)=>er.message).join(",");
+   next(new ExpressError(400,errMsg)) ;
+  }else{
+    next();
+
+  }
+  
+
+}
+
+const validateReview=(req,res,next)=>{
+  let {error}=reviewSchema.validate(req.body);
+  console.log(error);
+  if(error){
+    let errMsg=error.details.map((er)=>er.message).join(",");
+    throw new ExpressError(400,errMsg);
+  }else{
+    next();
+
+  }
+  
+}
 //INDEX ROUTE
 app.get(
   "/listings",
   wrapAsync(async (req, res) => {
     const allListings = await list.find({});
+    
     res.render("../views/listings/index.ejs", { allListings });
   })
 );
@@ -62,30 +91,31 @@ app.get(
   "/listings/:id",
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let singleList = await list.findById(id);
-    if (!singleList) {
-      throw new ExpressError(404, "Listing is not found");
+    let singleList = await list.findById(id).populate("reviews");
+    if(!singleList){
+      next(new ExpressError(404,"Page Not Found"))
+    }else{
+        res.render("../views/listings/singleList.ejs", { singleList });
     }
-    res.render("../views/listings/singleList.ejs", { singleList });
+  
+    
   })
 );
 
 //CREATE ROUTE
 app.post(
-  "/listings",
-  wrapAsync(async (req, res, next) => {
-    let newListing = req.body;
+  "/listings",validateListing,
+  wrapAsync(async (req, res) => {
+    let newListing = new list(req.body);
+    
    
-    let result = listingSchema.validate(newListing);
-   
-    if (result.error) {
-      next(new ExpressError(400, "Enter all the  details"));
-    }else{
-      await list.insertOne(newListing);
+  
+    await newListing.save();
+ 
     res.redirect("/listings");
-    }
+  }
    
-  })
+  )
 );
 
 //UPDATE ROUTE
@@ -99,18 +129,39 @@ app.put("/listings/:id", async (req, res) => {
 
   res.redirect("/listings");
 });
+//DELETE LISTING
 app.delete("/listings/:id", async (req, res) => {
   let { id } = req.params;
-  await list.findByIdAndDelete(id);
+
+ 
+ await list.findByIdAndDelete(id);
   res.redirect("/listings");
 });
-app.all(/(.*)/, (req, res, next) => {
-  throw new ExpressError(404, "Page Not found");
-});
+
+//POST REVIEWS
+app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
+  let listing=await list.findById(req.params.id);
+  let newReview=new Review(req.body);
+  listing.reviews.push(newReview);
+  await newReview.save();
+  await listing.save();
+  res.redirect(`/listings/${req.params.id}`)
+}));
+
+//DELETE REVIEW ROUTE
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+  let{id,reviewId}=req.params;
+  await Review.findByIdAndDelete(reviewId);
+  res.redirect(`/listings/${id}`)
+}))
+
 
 //ERROR MIDDLEWARE
 app.use((err, req, res, next) => {
   let { status = 500, message = "Something went wrong!!" } = err;
  
-  res.render("../views/error.ejs", { message });
+ 
+  res.status(status).render("../views/error.ejs", { message });
 });
+
+

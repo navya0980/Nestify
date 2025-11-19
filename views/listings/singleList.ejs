@@ -2,31 +2,86 @@
 <body>
   <div class="row">
     <div class="show-card col-6 offset-3">
-         <div class="card-title"><%= singleList.title %></div>
-    <img src="<%= singleList.image.url %>" class="show-img" />
-  <div class="show-text">
-   
-    <div><%= singleList.description %></div>
-    <div>&#8377; <%= singleList.price.toLocaleString("en-IN") %></div>
-     <div><i class="fa-solid fa-location-dot"></i><%= singleList.location %>,<%= singleList.country %></div>
-  </div>
-  <div class=" btn-group" >
-      
-      <form action="/listings/edit/<%= singleList._id %>" method="get" class="e-btn">
-    <button  class="e-btn">Edit</button>
-  </form>
-  <form method="post" action="/listings/<%= singleList._id %>?_method=DELETE" class="d-btn">
-    <button >Delete</button>
-  </form>
-
+      <div class="card-title"><%= singleList.title %></div>
+      <img src="<%= singleList.image.url %>" class="show-img" />
+      <div class="show-text">
+        <div><%= singleList.description %></div>
+        <div><%= singleList.price.toLocaleString("en-IN") %></div>
+        <div>
+          <i class="fa-solid fa-location-dot"></i><%= singleList.location %>,<%=
+          singleList.country %>
+        </div>
+      </div>
+      <div class="btn-group">
+        <form
+          action="/listings/edit/<%= singleList._id %>"
+          method="get"
+          class="e-btn"
+        >
+          <button class="e-btn">Edit</button>
+        </form>
+        <form
+          method="post"
+          action="/listings/<%= singleList._id %>?_method=DELETE"
+          class="d-btn"
+        >
+          <button>Delete</button>
+        </form>
+      </div>
+      <hr />
+    </div>
     
-  </div>
-  </div>
+
+    <div class="review col-6 offset-3 mb-3">
+     <h4 class="mb-3">Leave a Review</h4>
+      <form action="/listings/<%= singleList._id %>/reviews" method="post">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Select rating</label>
+
+          <input
+            type="range"
+            class="form-range"
+            min="0"
+            max="5"
+            name="rating"
+            style="width: 10rem"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label"
+            >Describe your experience:</label
+          >
+          <textarea
+            name="comment"
+            id=""
+            row="4"
+            col="20"
+            class="form-control"
+          ></textarea>
+        </div>
+        <button class="btn btn-outline-dark">Submit</button>
+      </form>
+       <hr>
+    </div>
+
+    <div class="review-info col-6 offset-3 mb-3" >
+      <h4 class="mb-3">All reviews</h4>
+     
+       <div class="row ">
+         <% for( let review of singleList.reviews ) { %>
+        <div class="card review-card col-5 ms-3 mb-3">
+           <h5 class="card-title">Card title</h5>
+           <p class="card-text"><%= review.comment %></p>
+           <p class="card-text"><%= review.rating %></p>
+           <form method=POST action="/listings/<%= singleList._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
+            <button class="btn btn-sm btn-dark">Delete</button>
+           </form>
+        </div>
+        <% } %>
+     
+       </div>
+
+    </div>
+   
   </div>
 </body>
- 
-
- 
-
-
- 
