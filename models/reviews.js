@@ -10,6 +10,10 @@ const reviewSchema=new Schema({
     created_at:{
         type:Date,
         default:Date.now()
+    },
+    owner:{
+        type:Schema.Types.ObjectId,
+        ref:"User"
     }
 })
 module.exports=mongoose.model("Review",reviewSchema);

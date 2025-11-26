@@ -7,11 +7,13 @@
       <div class="show-text">
         <div><%= singleList.description %></div>
         <div><%= singleList.price.toLocaleString("en-IN") %></div>
+        <div><%= singleList.owner.username %></div>
         <div>
           <i class="fa-solid fa-location-dot"></i><%= singleList.location %>,<%=
           singleList.country %>
         </div>
       </div>
+     <% if (currUser&&currUser._id.equals(singleList.owner._id)) { %>
       <div class="btn-group">
         <form
           action="/listings/edit/<%= singleList._id %>"
@@ -28,6 +30,8 @@
           <button>Delete</button>
         </form>
       </div>
+      
+     <% } %>
       <hr />
     </div>
     
@@ -73,9 +77,11 @@
            <h5 class="card-title">Card title</h5>
            <p class="card-text"><%= review.comment %></p>
            <p class="card-text"><%= review.rating %></p>
-           <form method=POST action="/listings/<%= singleList._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
-            <button class="btn btn-sm btn-dark">Delete</button>
-           </form>
+           <% if (currUser&&currUser._id.equals(review.owner._id)) { %>
+            <form method=POST action="/listings/<%= singleList._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
+              <button class="btn btn-sm btn-dark">Delete</button>
+             </form>
+           <% } %>
         </div>
         <% } %>
      
