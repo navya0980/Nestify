@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
+
 const engine = require("ejs-mate");
 const session=require("express-session");
 const flash=require("connect-flash");
@@ -52,15 +53,7 @@ app.use((req,res,next)=>{
   res.locals.currUser=req.user;
     next();
 })
-app.get("/register",async(req,res)=>{
-  let fakeUser=new User({
-    email:"abc@gmail.com",
-    username:"abc123"
-  })
-  let user=await User.register(fakeUser,"abc123");
-  res.send(user);
 
-})
 //ROUTES
 app.use("/listings",listingRoute);
 app.use("/listings/:id/reviews",reviewRoute)

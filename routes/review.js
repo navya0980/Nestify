@@ -12,7 +12,7 @@ const {isLoggedIn,isReviewOwner}=require("../middleware.js");
 
 const validateReview=(req,res,next)=>{
   let {error}=reviewSchema.validate(req.body);
-  console.log(error);
+ 
   if(error){
     let errMsg=error.details.map((er)=>er.message).join(",");
     throw new ExpressError(400,errMsg);
@@ -25,10 +25,11 @@ const validateReview=(req,res,next)=>{
 
 
 //POST REVIEWS
-router.post("/",isLoggedIn,validateReview,wrapAsync(async(req,res)=>{
+router.post("/",validateReview,wrapAsync(async(req,res)=>{
   let listing=await list.findById(req.params.id);
   let newReview=new Review(req.body);
   newReview.owner=req.user._id;
+  
   listing.reviews.push(newReview);
   await newReview.save();
   await listing.save();
