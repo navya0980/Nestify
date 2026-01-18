@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const list=require("../models/listings.js");
 const initData=require("./data.js")
-console.log(list);
+
 main().then(()=>{
     console.log("connected");
 })

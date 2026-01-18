@@ -36,21 +36,28 @@
     </div>
     
 
-   <% if (currUser) { %>
+  
      <div class="review col-6 offset-3 mb-3">
      <h4 class="mb-3">Leave a Review</h4>
       <form action="/listings/<%= singleList._id %>/reviews" method="post">
         <div class="mb-3">
           <label for="rating" class="form-label">Select rating</label>
+          <fieldset class="starability-basic">
+  
+  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+  <input type="radio" id="second-rate1" name="rating" value="1" />
+  <label for="second-rate1" title="Terrible">1 star</label>
+  <input type="radio" id="second-rate2" name="rating" value="2" />
+  <label for="second-rate2" title="Not good">2 stars</label>
+  <input type="radio" id="second-rate3" name="rating" value="3" />
+  <label for="second-rate3" title="Average">3 stars</label>
+  <input type="radio" id="second-rate4" name="rating" value="4" />
+  <label for="second-rate4" title="Very good">4 stars</label>
+  <input type="radio" id="second-rate5" name="rating" value="5" />
+  <label for="second-rate5" title="Amazing">5 stars</label>
+</fieldset>
 
-          <input
-            type="range"
-            class="form-range"
-            min="0"
-            max="5"
-            name="rating"
-            style="width: 10rem"
-          />
+          
         </div>
         <div class="mb-3">
           <label for="comment" class="form-label"
@@ -69,7 +76,7 @@
        <hr>
     </div>
 
-   <% } %>
+  
     <div class="review-info col-6 offset-3 mb-3" >
       <h4 class="mb-3">All reviews</h4>
      
@@ -79,7 +86,10 @@
            <h5 class="card-title"> <%= review.owner.username %></h5>
           
            <p class="card-text"><%= review.comment %></p>
-           <p class="card-text"><%= review.rating %></p>
+           <p class="starability-result card-text" data-rating="<%= review.rating %>">
+    Rated: 3 stars
+  </p>
+          
            <% if (currUser&&currUser._id.equals(review.owner._id)) { %>
             <form method=POST action="/listings/<%= singleList._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
               <button class="btn btn-sm btn-dark">Delete</button>
