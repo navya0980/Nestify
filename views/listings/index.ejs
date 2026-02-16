@@ -1,0 +1,138 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="filters">
+ 
+    <div class="filter">
+    <div id="trending"><i class="fa-solid fa-fire"></i></div>
+    <p>Trending</p>
+   
+  </div>
+ 
+  <div class="filter">
+    <div id="beach"><i class="fa-solid fa-umbrella-beach"></i></div>
+    <p>Beach</p>
+   
+  </div>
+  <div class="filter">
+    <div id="mountain"><i class="fa-solid fa-mountain"></i></div>
+    <p>Mountains</p>
+   
+  </div>
+  <div class="filter">
+    <div id="room"><i class="fa-solid fa-hotel"></i></div>
+    <p>Rooms</p>
+   
+  </div>
+  <div class="filter">
+    <div id="city"><i class="fa-solid fa-mountain-city"></i></div>
+    <p>Iconic cities</p>
+   
+  </div>
+  <div class="filter">
+    <div id="castle"><i class="fa-brands fa-fort-awesome"></i></div>
+    <p>Castles</p>
+   
+  </div>
+  <div class="filter">
+    <div id="pool"><i class="fa-solid fa-person-swimming"></i></div>
+    <p>Amazing Pools</p>
+   
+  </div>
+  <div class="filter">
+    <div id="farm"><i class="fa-solid fa-seedling"></i></div>
+    <p>Farms</p>
+   
+  </div>
+  <div class="filter">
+    <div id="camp"><i class="fa-solid fa-tent"></i></div>
+    <p>Camps</p>
+   
+  </div>
+  
+   <div class="filter">
+    <div id="arctic"><i class="fa-solid fa-snowflake"></i></div>
+    <p>Arctic</p>
+   
+  </div>
+  <div class="filter">
+    <div id="dome"><i class="fa-solid fa-igloo"></i></div>
+    <p>Domes</p>
+   
+  </div>
+  <div class="filter">
+    <div id="city"><i class="fa-solid fa-city"></i></div>
+    <p>Iconic cities</p>
+   
+  </div>
+  <div class="filter">
+    <div id="boat"><i class="fa-solid fa-sailboat"></i></div>
+    <p>Boats</p>
+   
+  </div>
+  <div class="tax-switch">
+    <div class="form-check form-switch form-check-reverse">
+  <input class="form-check-input" type="checkbox" id="switchCheckReverse">
+  <label class="form-check-label" for="switchCheckReverse">Display after taxes</label>
+</div>
+  </div>
+  
+  
+</div>
+
+<body>
+ 
+  <div class="row col-4-lg">
+    <% for( let list of allListings ) { %>
+
+    <a href="/listings/<%= list._id %>" class="card-link">
+      <div class="card listing-card">
+        <img
+          src="<%= list.image.url %>"
+          class="card-img-top"
+          alt="<%= list.title %>"
+        />
+
+        <div class="card-img-overlay">
+          <button class="fa-heart-btn">
+            <i class="fa-regular fa-heart heart-outline"></i>
+            <i class="fa-solid fa-heart heart-solid"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            <b> <%= list.title %> <br /></b>
+          &#8377; <%= list.price.toLocaleString("en-IN") %>/night &nbsp;&nbsp;
+         <% if (list.tax) { %>
+           <i class="tax-info">+<%= list.tax %>% GST</i>
+          
+         <% } %>
+            
+          </p>
+          
+        </div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/category.js"></script>
+<script>
+  let taxswitch=document.getElementById("switchCheckReverse");
+  taxswitch.addEventListener("click",()=>{
+    let taxInfo=document.getElementsByClassName("tax-info");
+    for(info of taxInfo){
+      if(info.style.display!="inline")
+      info.style.display="inline";
+    else 
+     info.style.display="none";
+    }
+  })
+
+  
+  
+  
+
+</script>
+
+

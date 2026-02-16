@@ -1,0 +1,136 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body>
+  <div class="row">
+    <div class="show-card col-6 offset-3">
+      <div class="card-title"><%= singleList.title %></div>
+      <img src="<%= singleList.image.url %>" class="show-img" />
+      <div class="show-text">
+        <i><b><div><%= singleList.description %></div></b></i>
+        <h4><div>&#8377;<%= singleList.price.toLocaleString("en-IN") %></div></h4>
+      
+         <div><b>Owned by </b><%= singleList.owner.username %></div>
+       
+      
+        <div>
+          <i class="fa-solid fa-location-dot"></i><%= singleList.location %>,<%=
+          singleList.country %>
+        </div>
+      </div>
+     <% if (currUser&&currUser._id.equals(singleList.owner._id)) { %>
+      <div class="btn-group">
+        <form
+          action="/listings/edit/<%= singleList._id %>"
+          method="get"
+          class="e-btn"
+        >
+          <button class="e-btn">Edit</button>
+        </form>
+        <form
+          method="post"
+          action="/listings/<%= singleList._id %>?_method=DELETE"
+          class="d-btn"
+        >
+          <button>Delete</button>
+        </form>
+      </div>
+      
+     <% } %>
+      <hr />
+    </div>
+    
+
+  
+     <div class="review col-6 offset-3 mb-3">
+     <h4 class="mb-3">Leave a Review</h4>
+      <form action="/listings/<%= singleList._id %>/reviews" method="post">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Select rating</label>
+          <fieldset class="starability-basic">
+  
+  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+  <input type="radio" id="second-rate1" name="rating" value="1" />
+  <label for="second-rate1" title="Terrible">1 star</label>
+  <input type="radio" id="second-rate2" name="rating" value="2" />
+  <label for="second-rate2" title="Not good">2 stars</label>
+  <input type="radio" id="second-rate3" name="rating" value="3" />
+  <label for="second-rate3" title="Average">3 stars</label>
+  <input type="radio" id="second-rate4" name="rating" value="4" />
+  <label for="second-rate4" title="Very good">4 stars</label>
+  <input type="radio" id="second-rate5" name="rating" value="5" />
+  <label for="second-rate5" title="Amazing">5 stars</label>
+</fieldset>
+
+          
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label"
+            >Describe your experience:</label
+          >
+          <textarea
+            name="comment"
+            id=""
+            row="4"
+            col="20"
+            class="form-control"
+          ></textarea>
+        </div>
+        <button class="btn btn-outline-dark">Submit</button>
+      </form>
+       <hr>
+    </div>
+
+  
+  <% if (singleList.reviews.length>0) { %>
+      <div class="review-info col-6 offset-3 mb-3" >
+      <h4 class="mb-3">All reviews</h4>
+     
+       <div class="row ">
+         <% for( let review of singleList.reviews ) { %>
+        <div class="card review-card col-5 ms-3 mb-3">
+          <div class="review-i">
+            <div class="review-title">@ <%= review.owner.username %></div>
+            <div ><img class="r-img" src="<%= review.owner.avatar %>" alt=""></div>
+          </div> 
+          
+          
+           <p class="card-text"><%= review.comment %></p>
+           <p class="starability-result card-text" data-rating="<%= review.rating %>">
+    Rated: 3 stars
+  </p>
+          
+           <% if (currUser&&currUser._id.equals(review.owner._id)) { %>
+            <form method=POST action="/listings/<%= singleList._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
+              <button class="btn btn-sm btn-dark">Delete</button>
+             </form>
+           <% } %>
+        </div>
+        <% } %>
+     
+       </div>
+
+    </div>
+   
+  <% } %>
+  
+  
+  <div class="col-6 offset-3 mb-3">
+      <hr>
+    <b><h4>Where you will be in</h4></b>
+    <div id="map"></div>
+  </div>
+  
+   
+  </div>
+</body>
+<script>
+let lon="<%=singleList.geometry[0]%>",lat="<%=singleList.geometry[1]%>";
+let arr=[lat,lon];
+var map = L.map('map').setView([lat,lon], 13);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+L.marker([lat,lon]).addTo(map)
+    .openPopup();
+</script>

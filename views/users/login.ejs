@@ -1,0 +1,50 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<div class="col-4 offset-4 mt-5">
+  <form action="/login" method="POST">
+    <div class="login-form">
+      <h1>Login</h1>
+      <div class="input-group">
+        <input type="text" name="username" placeholder="Username" required />
+        <div><i class="fa-solid fa-user"></i></div>
+      </div>
+      <div class="input-group">
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <div><i class="fa-solid fa-lock"></i></div>
+      </div>
+
+      <div class="r-forgot">
+        <div class="remember">
+          <input type="checkbox" />
+          Remember me
+        </div>
+        <div class="forgot">
+          <a href="">Forgot Password?</a>
+        </div>
+      </div>
+
+      <button class="btn login-btn" type="submit">Login</button>
+      <div class="divider">
+    <span>OR</span>
+  </div>
+      <button
+        class="google-btn"
+        onclick="window.location.href = '/auth/google'"
+      >
+        <img
+          src="https://developers.google.com/identity/images/g-logo.png"
+          alt="Google logo"
+        />
+        <span>Sign in with Google</span>
+      </button>
+
+      <div class="register">
+        Don't have an account? <a href="/signup">Register</a>
+      </div>
+    </div>
+  </form>
+</div>
